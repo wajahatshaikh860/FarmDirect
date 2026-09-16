@@ -41,24 +41,31 @@ const icons = {
   Settings: Settings,
 };
 
-export default function DashboardSidebar({ role }) {
+export default function DashboardSidebar({ role, activeLabel = "Dashboard" }) {
   return (
     <aside className="dashboard-sidebar">
       <span className="eyebrow">{role} WORKSPACE</span>
       <nav aria-label="Dashboard navigation">
-        {menus[role].map((label, i) => {
+        {menus[role].map((label) => {
           const Icon = icons[label];
-          return i === 0 ? (
+          const href =
+            label === "Dashboard"
+              ? "/" + role.toLowerCase() + "/dashboard"
+              : label === "Profile"
+                ? "/profile"
+                : role === "FARMER" && label === "My Products"
+                  ? "/farmer/products"
+                  : role === "FARMER" && label === "Add Product"
+                    ? "/farmer/products/new"
+                    : role === "BUYER" && label === "Marketplace"
+                      ? "/marketplace"
+                      : null;
+          return href ? (
             <Link
-              href={`/${role.toLowerCase()}/dashboard`}
-              className="active"
+              href={href}
+              className={label === activeLabel ? "active" : undefined}
               key={label}
             >
-              <Icon size={17} />
-              {label}
-            </Link>
-          ) : label === "Profile" ? (
-            <Link key={label} href="/profile">
               <Icon size={17} />
               {label}
             </Link>
