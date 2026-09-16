@@ -1,0 +1,17 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import bcrypt from 'bcryptjs';
+import { registerSchema, loginSchema, passwordSchema } from '../lib/validators.js';
+import User from '../models/User.js';
+import { dashboardFor } from '../lib/constants.js';
+const buyer={name:'Test Buyer',email:' BUYER@example.com ',phone:'9876543210',password:'StrongPassword123',confirmPassword:'StrongPassword123',role:'BUYER'};
+test('Buyer registration accepts and normalizes valid fields',()=>{assert.equal(registerSchema.parse(buyer).email,'buyer@example.com');});
+test('Farmer registration requires complete farm details',()=>{assert.equal(registerSchema.safeParse({...buyer,role:'FARMER'}).success,false);assert.equal(registerSchema.safeParse({...buyer,role:'FARMER',farmName:'Test Farm',district:'Pune',state:'Maharashtra',farmingType:'Organic'}).success,true);});
+test('Public signup rejects admin roles and injected authorization fields',()=>{for(const value of [{...buyer,role:'ADMIN'},{...buyer,userId:'x'},{...buyer,passwordHash:'x'},{...buyer,accountStatus:'ACTIVE'}]) assert.equal(registerSchema.safeParse(value).success,false);});
+test('Invalid registration fields and mismatched passwords are rejected',()=>{for(const patch of [{email:'bad'},{name:'a'},{phone:'123'},{password:'short'},{confirmPassword:'different'}]) assert.equal(registerSchema.safeParse({...buyer,...patch}).success,false);});
+test('Passwords cannot silently exceed bcrypt byte limit',()=>{assert.equal(passwordSchema.safeParse('é'.repeat(37)).success,false);});
+test('Login validation normalizes email',()=>{assert.equal(loginSchema.parse({email:buyer.email,password:buyer.password}).email,'buyer@example.com');});
+test('bcrypt hashes at cost 12 and verifies only the correct password',async()=>{const hash=await bcrypt.hash(buyer.password,12);assert.notEqual(hash,buyer.password);assert.equal(bcrypt.getRounds(hash),12);assert.equal(await bcrypt.compare(buyer.password,hash),true);assert.equal(await bcrypt.compare('wrong',hash),false);});
+test('Model excludes password hash and plaintext password from JSON',()=>{const user=new User({...buyer,passwordHash:'test-hash'});assert.equal(user.password,undefined);assert.equal(user.toJSON().passwordHash,undefined);assert.equal(User.schema.path('passwordHash').options.select,false);assert.equal(User.schema.path('email').options.unique,true);});
+test('Model validates roles and account states',()=>{assert.ok(new User({...buyer,passwordHash:'hash',role:'INVALID'}).validateSync());assert.ok(new User({...buyer,passwordHash:'hash',accountStatus:'INVALID'}).validateSync());});
+test('Each role maps to its own dashboard',()=>{for(const role of ['FARMER','BUYER','ADMIN'])assert.equal(dashboardFor(role),`/${role.toLowerCase()}/dashboard`);});
