@@ -1,80 +1,9 @@
 import ProductFilterPanel from "./ProductFilterPanel";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import {
-  PRODUCT_CATEGORIES,
-  PRODUCT_FARMING_TYPES,
-  PRODUCT_GRADES,
-} from "@/lib/constants";
+import { PRODUCT_CATEGORIES, PRODUCT_FARMING_TYPES, PRODUCT_GRADES } from "@/lib/constants";
 import { displayFarmingType } from "@/lib/productUtils";
 export default function ProductFilters({ filters }) {
-  const select = (name, label, options) => (
-    <label className="field">
-      <span>{label}</span>
-      <select name={name} defaultValue={filters[name] || ""}>
-        <option value="">All</option>
-        {options.map((value) => (
-          <option value={value} key={value}>
-            {name === "farmingType" ? displayFarmingType(value) : value}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-  return (
-    <ProductFilterPanel>
-      <form action="/marketplace" className="product-filter-form">
-        {filters.q && <input type="hidden" name="q" value={filters.q} />}
-        <input type="hidden" name="sort" value={filters.sort || "newest"} />
-        {select("category", "Category", PRODUCT_CATEGORIES)}
-        <div className="product-price-fields">
-          <Input
-            name="minPrice"
-            label="Min price (₹)"
-            type="number"
-            min="0"
-            step="0.01"
-            defaultValue={filters.minPrice}
-          />
-          <Input
-            name="maxPrice"
-            label="Max price (₹)"
-            type="number"
-            min="0"
-            step="0.01"
-            defaultValue={filters.maxPrice}
-          />
-        </div>
-        {select("farmingType", "Farming type", PRODUCT_FARMING_TYPES)}
-        {select("qualityGrade", "Quality grade", PRODUCT_GRADES)}
-        <Input
-          name="state"
-          label="State"
-          maxLength={100}
-          defaultValue={filters.state}
-        />
-        <Input
-          name="district"
-          label="District"
-          maxLength={100}
-          defaultValue={filters.district}
-        />
-        <label className="field">
-          <span>Availability</span>
-          <select
-            name="availability"
-            defaultValue={filters.availability || "in-stock"}
-          >
-            <option value="in-stock">In stock</option>
-            <option value="out-of-stock">Out of stock</option>
-            <option value="all">All listed products</option>
-          </select>
-        </label>
-        <Button className="small">Apply filters</Button>
-        <Button href="/marketplace" variant="secondary" className="small">
-          Clear filters
-        </Button>
-      </form>
-    </ProductFilterPanel>
-  );
+  const select = (name, label, options) => <label className="field"><span>{label}</span><select name={name} defaultValue={filters[name] || ""}><option value="">All</option>{options.map(value => <option value={value} key={value}>{name === "farmingType" ? displayFarmingType(value) : value}</option>)}</select></label>;
+  return <ProductFilterPanel><form action="/marketplace" className="product-filter-form">{filters.q && <input type="hidden" name="q" value={filters.q} />}<input type="hidden" name="sort" value={filters.sort || "newest"} />{select("category", "Category", PRODUCT_CATEGORIES)}<div className="product-price-fields"><Input name="minPrice" label="Min price (₹)" type="number" min="0" step="0.01" defaultValue={filters.minPrice} /><Input name="maxPrice" label="Max price (₹)" type="number" min="0" step="0.01" defaultValue={filters.maxPrice} /></div>{select("farmingType", "Farming type", PRODUCT_FARMING_TYPES)}{select("qualityGrade", "Quality grade", PRODUCT_GRADES)}<Input name="state" label="State" maxLength={100} defaultValue={filters.state} /><Input name="district" label="District" maxLength={100} defaultValue={filters.district} /><label className="field"><span>Availability</span><select name="availability" defaultValue={filters.availability || "in-stock"}><option value="in-stock">In stock</option><option value="out-of-stock">Out of stock</option><option value="all">All listed products</option></select></label><div className="product-filter-actions"><Button href="/marketplace" variant="secondary" className="small">Clear Filters</Button><Button className="small">Apply Filters</Button></div></form></ProductFilterPanel>;
 }

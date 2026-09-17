@@ -4,6 +4,8 @@ export default function ProductPageShell({
   children,
   workspace = false,
   activeLabel = "My Products",
+  fullWidth = false,
+  marketplace = false,
 }) {
   return workspace ? (
     <div className="container dashboard product-workspace">
@@ -11,6 +13,6 @@ export default function ProductPageShell({
       <section className="dashboard-main">{children}</section>
     </div>
   ) : (
-    <section className="container product-page">{children}</section>
+    <section className={"container product-page" + (fullWidth ? " product-page-wide" : "") + (marketplace ? " marketplace-page" : "")}>{children}</section>
   );
 }

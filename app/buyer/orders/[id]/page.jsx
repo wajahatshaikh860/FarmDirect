@@ -1,3 +1,4 @@
+import { OrderReviews } from "@/components/phase4/Reviews";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/permissions";
 import { getOrder } from "@/services/orderService";
@@ -17,6 +18,7 @@ export default async function Page({ params }) {
   return (
     <CommerceShell role="BUYER" activeLabel="My Orders">
       <OrderDetail order={order} role="BUYER" />
+      <OrderReviews order={order} user={user} />
     </CommerceShell>
   );
 }

@@ -1,3 +1,4 @@
+import { notifyNewOrders, notifyOrderStatus } from "./notificationService.js";
 import Cart from "../models/Cart.js";
 import Product from "../models/Product.js";
 import Order from "../models/Order.js";
@@ -147,7 +148,7 @@ export async function placeCodOrder(user, input) {
   const values = parseCommerce(checkoutSchema, input);
   if (values.paymentMethod !== "COD")
     throw new ProductError("Use the Razorpay Test Payment flow", 400);
-  return commerceTransaction(async (session) => {
+  const result = await commerceTransaction(async (session) => {
     let attempt = await CheckoutAttempt.findOne({
       buyer: user.id,
       requestId: values.requestId,
@@ -177,6 +178,8 @@ export async function placeCodOrder(user, input) {
     );
     return { orderIds: await completeCheckout(attempt, user, session) };
   });
+  await notifyNewOrders(result.orderIds);
+  return result;
 }
 export async function getOrders(user, role, page = 1) {
   requireProductRole(user, [role]);
@@ -214,7 +217,7 @@ export async function updateOrderStatus(user, id, input) {
   requireProductRole(user, ["FARMER"]);
   parseCommerce(objectId, id);
   const { status } = parseCommerce(statusSchema, input);
-  return commerceTransaction(async (session) => {
+  const result = await commerceTransaction(async (session) => {
     const order = await Order.findById(id).session(session);
     if (!order) throw new ProductError("Order not found", 404);
     assertOwner(user, order, "FARMER");
@@ -241,4 +244,6 @@ export async function updateOrderStatus(user, id, input) {
     await order.save({ session });
     return serializeCommerce(order);
   });
+  await notifyOrderStatus(result);
+  return result;
 }

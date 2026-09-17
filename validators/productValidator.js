@@ -50,6 +50,10 @@ export const productFieldsSchema = z
     farmingType: z.enum(PRODUCT_FARMING_TYPES),
     location: z
       .object({
+        addressLine: z.string().trim().max(200).optional(),
+        postalCode: z.string().trim().regex(/^$|^[1-9][0-9]{5}$/, "Enter a valid pincode").optional(),
+        latitude: z.number().finite().min(-90).max(90).nullable().optional(),
+        longitude: z.number().finite().min(-180).max(180).nullable().optional(),
         village: z.string().trim().max(100).optional(),
         district: z.string().trim().min(2, "Enter a district").max(100),
         state: z.string().trim().min(2, "Enter a state").max(100),

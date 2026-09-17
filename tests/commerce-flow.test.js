@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import { readFileSync } from "node:fs";
 import { ProductError } from "../lib/productErrors.js";
 import { readCommerceRequest } from "../lib/commerceRequest.js";
+import Notification from "../models/Notification.js";
 import Cart from "../models/Cart.js";
 import Product from "../models/Product.js";
 import Order from "../models/Order.js";
@@ -155,6 +156,8 @@ beforeEach(() => {
       return doc;
     });
   });
+  mock.method(Notification, "bulkWrite", async () => ({}));
+  mock.method(Order, "find", q => query(orders.filter(o => q._id.$in.map(String).includes(String(o._id)))));
   mock.method(Order, "findById", (id) =>
     query(orders.find((o) => String(o._id) === String(id)) || null),
   );

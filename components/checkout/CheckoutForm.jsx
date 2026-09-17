@@ -162,11 +162,11 @@ export default function CheckoutForm({ cart, user, razorpayAvailable }) {
               disabled={!razorpayAvailable}
             />
             <span>
-              Razorpay Test Payment
+              Razorpay Online Payment
               <small>
                 {razorpayAvailable
                   ? "Demo transaction. No real money."
-                  : "Unavailable until server Test credentials are configured."}
+                  : "Currently unavailable"}
               </small>
             </span>
           </label>

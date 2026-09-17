@@ -1,3 +1,8 @@
+import FarmMap from "@/components/phase4/FarmMap";
+import { ProductReviews, FarmerRating } from "@/components/phase4/Reviews";
+import StarRating from "@/components/phase4/StarRating";
+import WishlistButton from "@/components/wishlist/WishlistButton";
+import { ratingSummary } from "@/services/reviewService";
 import { notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -25,6 +30,7 @@ export default async function ProductDetails({ params }) {
     throw error;
   }
   const farmer = product.farmer;
+  const productRating = await ratingSummary("product", product._id);
   const manages =
     session?.user &&
     (session.user.role === "ADMIN" ||
@@ -55,7 +61,12 @@ export default async function ProductDetails({ params }) {
                 ? "Hidden listing"
                 : "Out of stock"}
           </span>
+          <div className="product-rating-summary"><StarRating value={productRating.average} /><span>{productRating.average.toFixed(1)} ({productRating.count} {productRating.count === 1 ? "Review" : "Reviews"})</span></div>
           <dl className="product-facts">
+            <div className="product-description-fact">
+              <dt>Description</dt>
+              <dd>{product.description}</dd>
+            </div>
             <div>
               <dt>Available quantity</dt>
               <dd>
@@ -111,8 +122,9 @@ export default async function ProductDetails({ params }) {
                 <ShieldCheck size={15} /> Verified farmer
               </span>
             )}
+            {farmer?._id && <FarmerRating id={farmer._id} />}
           </div>
-          <AddToCart product={product} role={session?.user?.role} />
+          <div className="product-purchase-actions"><AddToCart product={product} role={session?.user?.role} /><WishlistButton productId={product._id} /></div>
           {manages && (
             <Button
               href={"/farmer/products/" + product._id + "/edit"}
@@ -123,10 +135,8 @@ export default async function ProductDetails({ params }) {
           )}
         </div>
       </div>
-      <section className="product-description">
-        <h2>About this produce</h2>
-        <p>{product.description}</p>
-      </section>
+      <ProductReviews product={product} user={session?.user} />
+      <FarmMap location={{...product.location, addressLine: undefined, postalCode: undefined, latitude: typeof product.location?.latitude === "number" ? Math.round(product.location.latitude*100)/100 : null, longitude: typeof product.location?.longitude === "number" ? Math.round(product.location.longitude*100)/100 : null}} approximate />
     </ProductPageShell>
   );
 }

@@ -1,4 +1,5 @@
 "use client";
+import ProductLocationFields from "@/components/phase4/ProductLocationFields";
 import { LoaderCircle } from "lucide-react";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -105,9 +106,7 @@ export default function ProductForm({
             <option value="DISABLED">Hidden from marketplace</option>
           </select>
         </label>
-        {field("village", "Village", "text", { maxLength: 100 })}
-        {field("district", "District", "text", { maxLength: 100 })}
-        {field("state", "State", "text", { maxLength: 100 })}
+        <ProductLocationFields location={product?.location} disabled={busy} errors={errors} />
       </div>
       <ProductImageUploader
         existing={existing}
@@ -117,8 +116,7 @@ export default function ProductForm({
         disabled={busy}
       />
       <p className="form-note">
-        Zero stock is automatically marked out of stock. Ordering will be
-        introduced in a later phase.
+        Zero stock is automatically marked out of stock.
       </p>
       {errors.form && (
         <p role="alert" className="field-error">

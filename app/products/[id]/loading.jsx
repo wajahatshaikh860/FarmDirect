@@ -1,1 +1,1 @@
-export { default } from "@/components/product/ProductLoading";
+export default function Loading(){return <section className="container" role="status" aria-live="polite" style={{paddingTop:40,paddingBottom:40}}><h2>Loading product and reviews…</h2><p>Please wait a moment.</p></section>;}

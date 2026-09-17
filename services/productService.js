@@ -1,3 +1,4 @@
+import { publicProduct } from "../lib/farmLocation.js";
 import Product from "../models/Product.js";
 import "../models/User.js";
 import { connectDB } from "../lib/db.js";
@@ -43,6 +44,10 @@ export function allowedProductFields(value) {
     qualityGrade: value.qualityGrade,
     farmingType: value.farmingType,
     location: {
+      addressLine: value.location.addressLine,
+      postalCode: value.location.postalCode,
+      latitude: value.location.latitude,
+      longitude: value.location.longitude,
       village: value.location.village || "",
       district: value.location.district,
       state: value.location.state,
@@ -103,7 +108,7 @@ export async function getProducts(input = {}) {
     Product.countDocuments(query),
   ]);
   return {
-    products: serializeProduct(products),
+    products: products.map(publicProduct),
     total,
     page: filters.page,
     pages: Math.ceil(total / PAGE_SIZE),
@@ -146,7 +151,8 @@ export async function getProductById(id, user) {
       throw new ProductError("Product not found", 404);
     }
   }
-  return serializeProduct(product);
+  const owner = String(product.farmer?._id || product.farmer);
+  return user && (user.role === "ADMIN" || user.id === owner) ? serializeProduct(product) : publicProduct(product);
 }
 export async function getProductForManagement(id, user) {
   requireProductRole(user, ["FARMER", "ADMIN"]);

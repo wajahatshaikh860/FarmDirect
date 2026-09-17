@@ -18,7 +18,7 @@ export default async function Page() {
         <CheckoutForm
           cart={cart}
           user={user}
-          razorpayAvailable={razorpayConfigured()}
+          razorpayAvailable={false}
         />
       ) : (
         <div className="commerce-panel commerce-empty">

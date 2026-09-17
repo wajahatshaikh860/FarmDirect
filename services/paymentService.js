@@ -1,3 +1,4 @@
+import { notifyNewOrders } from "./notificationService.js";
 import CheckoutAttempt from "../models/CheckoutAttempt.js";
 import { connectDB } from "../lib/db.js";
 import { commerceTransaction } from "../lib/commerceTransaction.js";
@@ -142,7 +143,7 @@ export async function verifyTestPayment(user, input, gateway) {
       400,
     );
   }
-  return commerceTransaction(async (session) => {
+  const result = await commerceTransaction(async (session) => {
     const current = await CheckoutAttempt.findOne({
       _id: attempt._id,
       buyer: user.id,
@@ -156,4 +157,6 @@ export async function verifyTestPayment(user, input, gateway) {
       orderIds: await completeCheckout(current, user, session, payment),
     };
   });
+  await notifyNewOrders(result.orderIds);
+  return result;
 }

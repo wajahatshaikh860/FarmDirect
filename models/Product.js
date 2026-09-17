@@ -72,6 +72,10 @@ const productSchema = new mongoose.Schema(
     qualityGrade: { type: String, enum: PRODUCT_GRADES, required: true },
     farmingType: { type: String, enum: PRODUCT_FARMING_TYPES, required: true },
     location: {
+      addressLine: { type: String, trim: true, maxlength: 200 },
+      postalCode: { type: String, trim: true, maxlength: 6 },
+      latitude: { type: Number, min: -90, max: 90, validate: value => value == null || Number.isFinite(value) },
+      longitude: { type: Number, min: -180, max: 180, validate: value => value == null || Number.isFinite(value) },
       village: { type: String, trim: true, maxlength: 100 },
       district: { type: String, required: true, trim: true, maxlength: 100 },
       state: { type: String, required: true, trim: true, maxlength: 100 },

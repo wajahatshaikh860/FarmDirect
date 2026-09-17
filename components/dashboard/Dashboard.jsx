@@ -1,18 +1,18 @@
+import { dashboardAnalytics } from "@/services/analyticsService";
+import AnalyticsStats from "@/components/phase4/AnalyticsStats";
 import DashboardSidebar from "@/components/layout/DashboardSidebar";
 import Notice from "./Notice";
 import WelcomeSection from "./WelcomeSection";
-import DashboardStats from "./DashboardStats";
-import DashboardEmptyState from "./DashboardEmptyState";
 import ProfileTip from "./ProfileTip";
-export default function Dashboard({ user, counts }) {
+export default async function Dashboard({ user }) {
+  const analytics = await dashboardAnalytics(user);
   return (
     <div className="container dashboard">
       <Notice />
       <DashboardSidebar role={user.role} />
       <section className="dashboard-main">
         <WelcomeSection user={user} />
-        <DashboardStats role={user.role} counts={counts} />
-        <DashboardEmptyState role={user.role} />
+        <AnalyticsStats role={user.role} data={analytics} />
         <ProfileTip />
       </section>
     </div>

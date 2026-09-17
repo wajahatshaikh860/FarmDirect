@@ -1,13 +1,15 @@
+import VerificationBadge from "@/components/phase4/VerificationBadge";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import ProductImage from "./ProductImage";
+import WishlistButton from "@/components/wishlist/WishlistButton";
 import {
   formatCurrency,
   unitLabel,
   displayFarmingType,
   productLocation,
 } from "@/lib/productUtils";
-export default function ProductCard({ product, children }) {
+export default function ProductCard({ product, children, isWishlisted = false }) {
   return (
     <article className="product-card">
       <Link
@@ -31,6 +33,7 @@ export default function ProductCard({ product, children }) {
                 ? "Hidden"
                 : "Out of stock"}
           </span>
+          <WishlistButton productId={product._id} initialSaved={isWishlisted} compact />
         </div>
         <h2>
           <Link href={"/products/" + product._id}>{product.name}</Link>
@@ -51,6 +54,7 @@ export default function ProductCard({ product, children }) {
             }) || "Location not specified"}
           </span>
         </p>
+        <VerificationBadge status={product.farmer?.verificationStatus} />
         <span className="product-badge">
           {displayFarmingType(product.farmingType)}
         </span>

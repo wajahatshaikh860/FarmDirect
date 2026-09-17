@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import NotificationBell from "@/components/phase4/NotificationBell";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import MobileMenu from "./MobileMenu";
@@ -34,6 +35,7 @@ export default function Navbar() {
               {user.role === "FARMER" && (
                 <Link href="/farmer/dashboard">Sell Produce</Link>
               )}
+              <NotificationBell key={user.id} />
               <Logout />
             </>
           ) : (

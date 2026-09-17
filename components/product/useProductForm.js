@@ -13,11 +13,11 @@ export default function useProductForm(product, returnTo = "/farmer/products") {
     setBusy(true);
     setErrors({});
     const values = Object.fromEntries(new FormData(event.currentTarget));
-    const { village, district, state, ...fields } = values;
+    const { village, district, state, addressLine, postalCode, latitude, longitude, ...fields } = values;
     const body = new FormData();
     body.append(
       "data",
-      JSON.stringify({ ...fields, location: { village, district, state } }),
+      JSON.stringify({ ...fields, location: { village, district, state, addressLine, postalCode, latitude: latitude === "" ? null : Number(latitude), longitude: longitude === "" ? null : Number(longitude) } }),
     );
     body.append(
       "retainedImages",
@@ -29,6 +29,7 @@ export default function useProductForm(product, returnTo = "/farmer/products") {
         product ? "/api/products/" + product._id : "/api/products",
         { method: product ? "PATCH" : "POST", body },
       );
+      if (!response.headers.get("content-type")?.includes("application/json")) throw new Error("Service unavailable");
       const result = await response.json();
       if (!response.ok) {
         setErrors(result.errors || {});
@@ -38,6 +39,7 @@ export default function useProductForm(product, returnTo = "/farmer/products") {
       toast.success(
         product ? "Product updated successfully" : "Product added successfully",
       );
+      if (!latitude || !longitude) toast.warning("Location saved, but map coordinates could not be detected.");
       if (result.cleanupFailed)
         toast.warning("Some obsolete image cleanup could not be completed.");
       router.push(returnTo);
