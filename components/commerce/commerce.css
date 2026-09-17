@@ -1,0 +1,250 @@
+.commerce-workspace {
+  padding-top: 32px;
+  padding-bottom: 64px;
+}
+.commerce-heading {
+  margin-bottom: 24px;
+}
+.commerce-heading h1 {
+  margin: 8px 0;
+}
+.commerce-panel {
+  background: #fff;
+  border: 1px solid var(--border, #e3e8df);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.commerce-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  gap: 24px;
+  align-items: start;
+}
+.commerce-summary {
+  position: sticky;
+  top: 96px;
+}
+.commerce-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+.commerce-total {
+  font-size: 1.3rem;
+  font-weight: 700;
+  border-top: 1px solid var(--border, #e3e8df);
+  padding-top: 16px;
+}
+.commerce-item {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  gap: 18px;
+  border-bottom: 1px solid var(--border, #e3e8df);
+  padding: 20px 0;
+}
+.commerce-item:first-child {
+  padding-top: 0;
+}
+.commerce-item:last-child {
+  border: 0;
+}
+.commerce-item-image {
+  height: 90px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.commerce-item h2 {
+  font-size: 1.1rem;
+  overflow-wrap: anywhere;
+  margin: 0 0 8px;
+}
+.commerce-quantity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 8px;
+  margin-top: 12px;
+}
+.commerce-quantity .field {
+  max-width: 130px;
+  margin: 0;
+}
+.commerce-quantity .button {
+  min-height: 42px;
+}
+.commerce-error {
+  color: #9e342b;
+  font-size: 0.9rem;
+}
+.commerce-empty {
+  text-align: center;
+  padding: 48px 20px;
+}
+.commerce-empty p {
+  margin: 12px 0 24px;
+}
+.commerce-address {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 18px 0;
+}
+.commerce-address .field {
+  margin: 0;
+}
+.commerce-address .wide {
+  grid-column: 1/-1;
+}
+.commerce-payment {
+  border: 0;
+  padding: 0;
+  margin: 24px 0;
+}
+.commerce-payment legend {
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.commerce-payment label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border, #e3e8df);
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.commerce-payment input {
+  accent-color: var(--green);
+}
+.commerce-payment small {
+  display: block;
+  color: var(--muted, #687367);
+}
+.commerce-order-card h2 {
+  font-size: 1.1rem;
+  overflow-wrap: anywhere;
+}
+.commerce-order-card p {
+  margin: 8px 0;
+}
+.commerce-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+.commerce-badge {
+  display: inline-block;
+  border-radius: 20px;
+  background: var(--light, #edf6e9);
+  color: var(--dark);
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.commerce-badge.cancelled {
+  background: #fbece9;
+  color: #9e342b;
+}
+.commerce-timeline {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+  margin: 20px 0;
+}
+.commerce-timeline li {
+  border-left: 3px solid var(--green);
+  padding: 4px 0 4px 16px;
+}
+.commerce-timeline time {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted, #687367);
+}
+.commerce-order-items {
+  list-style: none;
+  padding: 0;
+}
+.commerce-order-items li {
+  border-bottom: 1px solid var(--border, #e3e8df);
+  padding: 14px 0;
+  overflow-wrap: anywhere;
+}
+.commerce-address-display {
+  font-style: normal;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.commerce-add {
+  padding: 20px 0;
+}
+.commerce-note {
+  font-size: 0.9rem;
+  color: var(--muted, #687367);
+  margin: 12px 0;
+}
+.commerce-pagination {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+@media (max-width: 1000px) {
+  .commerce-layout {
+    grid-template-columns: 1fr;
+  }
+  .commerce-summary {
+    position: static;
+  }
+}
+@media (max-width: 600px) {
+  .commerce-panel {
+    padding: 18px;
+  }
+  .commerce-address {
+    grid-template-columns: 1fr;
+  }
+  .commerce-item {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .commerce-item-image {
+    height: 64px;
+  }
+  .commerce-quantity .field {
+    max-width: 105px;
+  }
+  .commerce-row {
+    font-size: 0.95rem;
+  }
+  .commerce-workspace {
+    padding-top: 20px;
+  }
+  .commerce-heading h1 {
+    font-size: 1.9rem;
+  }
+}
+.commerce-item-image .product-image {
+  height: 100%;
+  aspect-ratio: auto;
+}
+.commerce-item-image .product-image-fallback span {
+  display: none;
+}
+.commerce-item-image .product-image-fallback svg {
+  width: 30px;
+  height: 30px;
+}
+.commerce-order-line {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 14px;
+}
+.commerce-order-line .commerce-item-image {
+  height: 64px;
+}

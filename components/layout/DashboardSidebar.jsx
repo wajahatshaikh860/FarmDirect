@@ -22,7 +22,7 @@ const menus = {
     "Earnings",
     "Profile",
   ],
-  BUYER: ["Dashboard", "Marketplace", "My Orders", "Wishlist", "Profile"],
+  BUYER: ["Dashboard", "Marketplace", "Cart", "My Orders", "Wishlist", "Profile"],
   ADMIN: ["Dashboard", "Users", "Farmers", "Products", "Orders", "Settings"],
 };
 const icons = {
@@ -30,6 +30,7 @@ const icons = {
   "My Products": Package,
   "Add Product": Plus,
   Orders: ShoppingBag,
+  Cart: ShoppingBag,
   Earnings: Wallet,
   Profile: UserRound,
   Marketplace: Sprout,
@@ -59,7 +60,13 @@ export default function DashboardSidebar({ role, activeLabel = "Dashboard" }) {
                     ? "/farmer/products/new"
                     : role === "BUYER" && label === "Marketplace"
                       ? "/marketplace"
-                      : null;
+                      : role === "BUYER" && label === "Cart"
+                        ? "/cart"
+                        : role === "BUYER" && label === "My Orders"
+                          ? "/buyer/orders"
+                          : role === "FARMER" && label === "Orders"
+                            ? "/farmer/orders"
+                            : null;
           return href ? (
             <Link
               href={href}

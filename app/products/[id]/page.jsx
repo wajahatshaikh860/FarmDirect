@@ -12,6 +12,7 @@ import {
 import ProductPageShell from "@/components/product/ProductPageShell";
 import ProductGallery from "@/components/product/ProductGallery";
 import Button from "@/components/ui/Button";
+import AddToCart from "@/components/cart/AddToCart";
 import { ShieldCheck } from "lucide-react";
 export const metadata = { title: "Product Details" };
 export default async function ProductDetails({ params }) {
@@ -111,6 +112,7 @@ export default async function ProductDetails({ params }) {
               </span>
             )}
           </div>
+          <AddToCart product={product} role={session?.user?.role} />
           {manages && (
             <Button
               href={"/farmer/products/" + product._id + "/edit"}
